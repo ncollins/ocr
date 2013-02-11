@@ -1,19 +1,22 @@
 # Python OCR
 
+import Image
+import numpy as np
+
+# test data
+
 testfile = "data/hk.png"
 
-import ImageFile
+# code
 
-fp = open(testfile, "rb")
+im_raw = Image.open(testfile)
+im_greyscale = im_raw.convert("L")
 
-p = ImageFile.Parser()
+width, height = im_greyscale.size
 
-while 1:
-    s = fp.read(1024)
-    if not s:
-        break
-    p.feed(s)
+im_array = np.ndarray(width * height)
 
-im = p.close()
+for p in im_greyscale.getdata():
+    im_array[0] = p
 
-#im.save("copy.jpg")
+im_array.resize((width,height))
