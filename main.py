@@ -35,7 +35,7 @@ def windows(im, rectangles, output_size):
     Parameters:
     im - a PIL image
     rectangles - a list of (width, height) pairs of rectangle sizes
-    size - the desired output size in (width, height) format
+    output_size - the desired output size in (width, height) format
     """
     im_width, im_height = im.size
     for dx, dy in rectangles:
@@ -46,8 +46,9 @@ def windows(im, rectangles, output_size):
 def array_windows(im, rectangles, output_size):
     """
     Parameters:
-    im_array - a numpy array representing a greyscale image
+    im - a PIL image
     rectangles - a list of (width, height) pairs of rectangle sizes
+    output_size - the desired output size in (width, height) format
     """
     return (image_to_array(w) for w in windows(im, rectangles, output_size))
 
