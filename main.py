@@ -14,8 +14,6 @@ testfile = "data/hk.png"
 
 # code
 
-im_raw = Image.open(testfile)
-
 def image_to_array(im):
     """
     Converts a PIL Image object into a numpy array representing
@@ -29,17 +27,32 @@ def image_to_array(im):
     im_array.shape = (width,height)
     return im_array
 
-im_array = image_to_array(im_raw)
 
 # sliding windows
 
-def windows(im_array, rectangles):
+def windows(im, rectangles, output_size):
+    """
+    Parameters:
+    im - a PIL image
+    rectangles - a list of (width, height) pairs of rectangle sizes
+    size - the desired output size in (width, height) format
+    """
+    im_width, im_height = im.size
+    for dx, dy in rectangles:
+        for x0, y0 in itertools.product(range(im_width-dx),range(im_height-dy)): 
+            yield im.transform(output_size, Image.EXTENT, (x0, y0, x0+dx, y0+dy))
+
+
+def array_windows(im, rectangles, output_size):
     """
     Parameters:
     im_array - a numpy array representing a greyscale image
     rectangles - a list of (width, height) pairs of rectangle sizes
     """
-    width, height = im_array.shape
-    for dx, dy in rectangles:
-        for x0, y0 in itertools.product(range(width-dx),range(height-dy)): 
-            yield im_array[x0:x0+dx, y0:y0+dy]
+    return (image_to_array(w) for w in windows(im, rectangles, output_size))
+
+
+# testing code
+
+im_raw = Image.open(testfile)
+im_array = image_to_array(im_raw)
