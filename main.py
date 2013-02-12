@@ -32,9 +32,8 @@ def image_to_array(im):
 
 def windows0(im, rectangles, output_size):
     im_width, im_height = im.size
-    for dxp1, dyp1 in rectangles:
-        dx, dy = dxp1-1, dxp1-1
-        for x0, y0 in itertools.product(range(im_width-dx),range(im_height-dy)): 
+    for dx, dy in rectangles:
+        for x0, y0 in itertools.product(range(im_width-dx+1),range(im_height-dy+1)):
             yield im.crop((x0, y0, x0+dx, y0+dy))
 
 def windows(im, rectangles, output_size):
@@ -45,11 +44,8 @@ def windows(im, rectangles, output_size):
     output_size - the desired output size in (width, height) format
     """
     im_width, im_height = im.size
-    for dxp1, dyp1 in rectangles:
-        dx, dy = dxp1-1, dxp1-1
-        for x0, y0 in itertools.product(range(im_width-dx),range(im_height-dy)): 
-            #if x0 < 3:
-                #print (x0,y0,x0+dx,y0+dy)
+    for dx, dy in rectangles:
+        for x0, y0 in itertools.product(range(im_width-dx+1),range(im_height-dy+1)):
             yield im.transform(output_size, Image.EXTENT, (x0, y0, x0+dx, y0+dy))
 
 
