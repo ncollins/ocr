@@ -29,9 +29,10 @@ def test_windows_first():
 def test_windows_last():
     im = Image.open(testfile)
     width, height = im.size
-    max_x, max_y = width - 1, height - 1
+    x_max, y_max = width - 1, height - 1
+    x0, y0 = width - 20, height - 20
     w = windows0(im,[(20,10)],(20,10))
-    im_t0 = im.crop((width-20,height-20,max_x,max_y))
+    im_t0 = im.crop((x0,y0,x_max,y_max))
     im_t1 = None
     for im_t1 in w:
         pass
