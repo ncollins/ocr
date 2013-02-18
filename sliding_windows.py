@@ -54,7 +54,7 @@ def array_windows(im, rectangles, output_size):
     return (image_to_array(w) for w in windows(im, rectangles, output_size))
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     # testing code
     testfile = "data/hk.png"
     im_raw = Image.open(testfile)

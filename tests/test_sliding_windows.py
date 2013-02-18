@@ -1,7 +1,7 @@
 # Test file for use with pytest
 
 import Image
-from ..main import windows, windows0
+from ..sliding_windows import windows, windows0
 
 testfile = "tests/test_image.png"
 
