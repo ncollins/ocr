@@ -15,7 +15,7 @@ def image_to_array(im):
     Converts a PIL Image object into a numpy array representing
     a greyscale image.
     """
-    im_greyscale = im_raw.convert("L")
+    im_greyscale = im.convert("L")
     width, height = im_greyscale.size
     im_array = np.ndarray(width * height)
     for i, p in enumerate(im_greyscale.getdata()):
