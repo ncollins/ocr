@@ -8,11 +8,7 @@ import numpy as np
 if sys.version_info.major < 3:
     range = xrange 
 
-# test data
-
-testfile = "data/hk.png"
-
-# code
+# functions
 
 def image_to_array(im):
     """
@@ -28,13 +24,12 @@ def image_to_array(im):
     return im_array
 
 
-# sliding windows
-
 def windows0(im, rectangles, output_size):
     im_width, im_height = im.size
     for dx, dy in rectangles:
         for x0, y0 in itertools.product(range(im_width-dx+1),range(im_height-dy+1)):
             yield im.crop((x0, y0, x0+dx, y0+dy))
+
 
 def windows(im, rectangles, output_size):
     """
@@ -59,7 +54,8 @@ def array_windows(im, rectangles, output_size):
     return (image_to_array(w) for w in windows(im, rectangles, output_size))
 
 
-# testing code
-
-im_raw = Image.open(testfile)
-im_array = image_to_array(im_raw)
+if __name__ = '__main__':
+    # testing code
+    testfile = "data/hk.png"
+    im_raw = Image.open(testfile)
+    im_array = image_to_array(im_raw)
