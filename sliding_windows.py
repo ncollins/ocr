@@ -10,7 +10,7 @@ if sys.version_info.major < 3:
 
 # functions
 
-def image_to_array(im):
+def image_to_array(im, reshape=True):
     """
     Converts a PIL Image object into a numpy array representing
     a greyscale image.
@@ -20,7 +20,8 @@ def image_to_array(im):
     im_array = np.ndarray(width * height)
     for i, p in enumerate(im_greyscale.getdata()):
         im_array[i] = p
-    im_array.shape = (width,height)
+    if reshape:
+        im_array.shape = (width,height)
     return im_array
 
 
