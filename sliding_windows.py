@@ -14,6 +14,12 @@ def image_to_array(im, reshape=True):
     """
     Converts a PIL Image object into a numpy array representing
     a greyscale image.
+    Parameters:
+        im - a PIL Image object
+        reshape (default: True) - if True then returns a 2D image
+                                otherwise it returns a flat 1D araray.
+    Output:
+        A numpy array.
     """
     im_greyscale = im.convert("L")
     width, height = im_greyscale.size
