@@ -27,8 +27,17 @@ def image_to_array(im, reshape=True):
     for i, p in enumerate(im_greyscale.getdata()):
         im_array[i] = p
     if reshape:
-        im_array.shape = (width,height)
+        im_array.shape = (height, width)
     return im_array
+
+
+def array_to_image(array):
+    height, width = array.shape
+    im = Image.new('L', (width, height), 255)
+    for x in range(width):
+        for y in range(height):
+            im.putpixel((x,y), array[y][x])
+    return im
 
 
 def windows0(im, rectangles, output_size):
