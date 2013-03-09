@@ -48,7 +48,7 @@ def cmp_lines(l0, l1):
 def regions(lines, border):
     regions = []
     current = ((0,0), (0,0))
-    for l in lines_sorted:
+    for l in lines:
         if len(regions) == 0:
             regions.append([l])
             current = ((0, max_y(l)), (0, max_y(l)))
@@ -69,8 +69,8 @@ def bounding_rectangle(lines, border):
     return (rx0-border, ry0-border), (rx1+border, ry1+border)
 
 
-if __name__ == '__main__':
-    im = Image.open('data/hk_eng_crop_2.png')
+def text_sections(im, output_height):
+    im = im.convert('L')
     im_array = image_to_array(im)
     im_arary = im_array / 255
 
@@ -83,11 +83,18 @@ if __name__ == '__main__':
     lines = probabilistic_hough(edges, threshold=5, line_length=20,
                                 line_gap=20, theta=theta)
 
-    lines_sorted = sorted(lines, cmp = cmp_lines)
+    lines_sorted = sorted(lines, cmp=cmp_lines)
+    rs = regions(lines_sorted, 2)
+    text_areas = [bounding_rectangle(ls, 4) for ls in rs]
+    for (x0, y0), (x1, y1) in text_areas:
+        width, height = x1 - x0, y1 - y0
+        output_width = width * output_height // height
+        yield(im.transform((output_width, output_height), Image.EXTENT,
+                           (x0, y0, x1, y1)))
 
-    rs = regions(lines, 2)
-    text_areas = [bounding_rectangle(ls, 0) for ls in rs]
-    im_out = Image.new('L', im.size, 255)
-    d2 = ImageDraw.Draw(im_out)
-    for t in text_areas:
-        d2.rectangle(t, fill=100)
+
+if __name__ == '__main__':
+    im = Image.open('data/hk_eng_crop_2.png')
+    text_sections(im, 20)
+    for t in text_sections(im, 20):
+        t.show()
