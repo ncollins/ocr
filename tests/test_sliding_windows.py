@@ -1,9 +1,23 @@
 # Test file for use with pytest
 
 import Image
-from ..sliding_windows import windows, windows0
+from ..sliding_windows import windows, windows0, image_to_array
 
 testfile = "tests/test_image.png"
+
+def test_image_to_array():
+    """
+    Check that pixels are mapped to the right part of the array.
+    """
+    im = Image.new('L', (4, 2))
+    for x in range(4):
+        for y in range(2):
+            im.putpixel((x,y), x*20+y)
+    array = image_to_array(im)
+    for x in range(4):
+        for y in range(2):
+            assert array[y, x] == x*20 + y
+
 
 def test_windows_sizes():
     """
