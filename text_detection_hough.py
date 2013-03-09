@@ -11,23 +11,6 @@ import Image
 import ImageDraw
 from sliding_windows import image_to_array, array_to_image
 
-#im = Image.open('data/hk_eng_crop.png')
-im = Image.open('data/hk_eng_crop_2.png')
-im_array = image_to_array(im)
-im_arary = im_array / 255
-
-#theta = np.ones(1) * np.pi / 2
-r = range(-50,50)
-r_theta = [np.pi/2 + x*0.001 for x in r]
-theta = np.array(r_theta)
-
-edges = canny(im_array, 2, 1, 25)
-
-lines = probabilistic_hough(edges, threshold=5, line_length=20,
-                            line_gap=20, theta=theta)
-
-
-# find clusters of lines
 
 def draw_lines(lines, shape):
     """
@@ -39,19 +22,21 @@ def draw_lines(lines, shape):
         draw.line([(x0, y0), (x1, y1)], width = 1)
     return im
 
-#im_lines = draw_lines(lines, im.size)
 
 def avg_y(l):
     (x0, y0), (x1, y1) = l
     return (y0 + y1) / 2
 
+
 def max_y(l):
     (x0, y0), (x1, y1) = l
     return max(y0, y1)
 
+
 def min_y(l):
     (x0, y0), (x1, y1) = l
     return min(y0, y1)
+
 
 def cmp_lines(l0, l1):
     if avg_y(l0) < avg_y(l1):
@@ -59,7 +44,6 @@ def cmp_lines(l0, l1):
     else:
         return 1
 
-lines_sorted = sorted(lines, cmp = cmp_lines)
 
 def regions(lines, border):
     regions = []
@@ -86,6 +70,21 @@ def bounding_rectangle(lines, border):
 
 
 if __name__ == '__main__':
+    im = Image.open('data/hk_eng_crop_2.png')
+    im_array = image_to_array(im)
+    im_arary = im_array / 255
+
+    r = range(-50,50)
+    r_theta = [np.pi/2 + x*0.001 for x in r]
+    theta = np.array(r_theta)
+
+    edges = canny(im_array, 2, 1, 25)
+
+    lines = probabilistic_hough(edges, threshold=5, line_length=20,
+                                line_gap=20, theta=theta)
+
+    lines_sorted = sorted(lines, cmp = cmp_lines)
+
     rs = regions(lines, 2)
     text_areas = [bounding_rectangle(ls, 0) for ls in rs]
     im_out = Image.new('L', im.size, 255)
