@@ -76,8 +76,6 @@ def regions(lines, border):
             current = ((0, max_y(l)), (0, max_y(l)))
     return regions
 
-rs = regions(lines, 2)
-
 
 def bounding_rectangle(lines, border):
     rx0 = min([x0 for (x0, y0), (x1, y1) in lines])
@@ -86,9 +84,11 @@ def bounding_rectangle(lines, border):
     ry1 = max([y1 for (x0, y0), (x1, y1) in lines])
     return (rx0-border, ry0-border), (rx1+border, ry1+border)
 
-text_areas = [bounding_rectangle(ls, 0) for ls in rs]
-im_out = Image.new('L', im.size, 255)
-d2 = ImageDraw.Draw(im_out)
 
-for t in text_areas:
-    d2.rectangle(t, fill=100)
+if __name__ == '__main__':
+    rs = regions(lines, 2)
+    text_areas = [bounding_rectangle(ls, 0) for ls in rs]
+    im_out = Image.new('L', im.size, 255)
+    d2 = ImageDraw.Draw(im_out)
+    for t in text_areas:
+        d2.rectangle(t, fill=100)
